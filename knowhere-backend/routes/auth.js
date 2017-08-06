@@ -1,109 +1,58 @@
+var router = require('express').Router();
+var auth = require('../controllers/auth');
+var passport = require('passport');
 
- 
-var auth = {
- 
-  login: function(req, res) {
- 
-    var username = req.body.username || '';
-    var password = req.body.password || '';
- 
-    if (username == '' || password == '') {
-      res.status(401);
-      res.json({
-        "status": 401,
-        "message": "Invalid credentials"
-      });
-      return;
-    }
- 
-    // Fire a query to your DB and check if the credentials are valid
-    var dbUserObj = auth.validate(username, password);
-   
-    if (!dbUserObj) { // If authentication fails, we send a 401 back
-      res.status(401);
-      res.json({
-        "status": 401,
-        "message": "Invalid credentials"
-      });
-      return;
-    }
- 
-    if (dbUserObj) {
- 
-      // If authentication is success, we will generate a token
-      // and dispatch it to the client
- 
-      res.json(genToken(dbUserObj));
-    }
- 
-  },
-
-  signup: function(req, res) {
-    var today = new Date();
-    var user={
-        "name":req.body.name,
-        "email":req.body.email,
-        "password":req.body.password,
-        "created_at":today,
-        "updated_at":today
-    }
-
-       connection.query('INSERT INTO users SET ?',users, function (error, results, fields) {
-      if (error) {
-        res.json({
-            status:false,
-            message:'there are some error with query'
-        })
-      }else{
-          res.json({
-            status:true,
-            data:results,
-            message:'user registered sucessfully'
-        })
-      }
-    });
-  },
-
-  validate: function(username, password) {
-    // spoofing the DB response for simplicity
-    var dbUserObj = { // spoofing a userobject from the DB. 
-      name: 'arvind',
-      role: 'admin',
-      username: 'arvind@myapp.com'
-    };
- 
-    return dbUserObj;
-  },
- 
-  validateUser: function(username) {
-    // spoofing the DB response for simplicity
-    var dbUserObj = { // spoofing a userobject from the DB. 
-      name: 'arvind',
-      role: 'admin',
-      username: 'arvind@myapp.com'
-    };
- 
-    return dbUserObj;
+router.post('/login', auth.login);
+router.post('/signup', auth.signup);
+router.get('/signup', 
+  function (req, res) {
+    res.json({'hello': 'hello'});
   }
-}
+);
+
+// GET /auth/instagram
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  The first step in Instagram authentication will involve
+//   redirecting the user to instagram.com.  After authorization, Instagram
+//   will redirect the user back to this application at /auth/instagram/callback
+router.get('/instagram',
+  // auth.instagramAuth,
+  function (req, res) {
+      // The request will be redirected to Instagram for authentication, so this
+      // function will not be called.
+  }
+);
+
+// GET /auth/instagram/callback
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  If authentication fails, the user will be redirected back to the
+//   login page.  Otherwise, the primary route function function will be called,
+//   which, in this example, will redirect the user to the home page.
+router.get('/instagram/callback',
+  // auth.instagramCallback,
+  function (req, res) {
+    res.redirect('/');
+  }
+);
  
-// private method
-function genToken(user) {
-  var expires = expiresIn(7); // 7 days
-  var token = jwt.encode({
-    exp: expires
-  }, require('../config/secret')());
- 
-  return {
-    token: token,
-    expires: expires,
-    user: user
-  };
-}
- 
-function expiresIn(numDays) {
-  var dateObj = new Date();
-  return dateObj.setDate(dateObj.getDate() + numDays);
-}
- 
-module.exports = auth;
+ // Facebook Auth Routes
+ router.get('/login/facebook', 
+  // auth.facebookAuth, 
+  function (req, res) {
+  //Rerouted automatically so never really called
+ });
+
+router.get('/login/facebook/return', 
+  // auth.facebookCallBack,
+  function(req, res) {
+    //Send a response back as json
+  });
+
+
+
+// @todo Create these methods and uncomment
+// router.get('/api/v1/admin/users/:id', users.getOne);
+// router.put('/api/v1/admin/users/:id', users.update);
+// router.delete('/api/v1/admin/users/:id', users.delete);
+
+module.exports = router;

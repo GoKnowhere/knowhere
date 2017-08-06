@@ -1,7 +1,7 @@
 var User = require('../models/User');
  
   exports.getAll = function(req, res) {
-    res.json('users': users);
+    res.json({'users': users});
   },
  
   // getOne: function(req, res) {
