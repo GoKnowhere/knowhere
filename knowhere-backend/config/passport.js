@@ -72,10 +72,10 @@ passport.use(new InstagramStrategy({
 
                 // if no user is found, return the message
                 if (!user)
-                    return done(null, false, req.flash('loginMessage', 'No user found.'));
+                    return done(null, false, {'loginMessage': 'No user found.'});
 
                 if (!user.validPassword(password))
-                    return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+                    return done(null, false, {'loginMessage': 'Oops! Wrong password.'});
 
                 // all is well, return user
                 else
@@ -109,7 +109,7 @@ passport.use(new InstagramStrategy({
 
                     // check to see if theres already a user with that email
                     if (user) {
-                      return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                      return done(null, false, {'error': 'Email is already talken'});
                     } else {
 
                       var hash = auth.hashPassword(req.body.password);
@@ -146,7 +146,7 @@ passport.use(new InstagramStrategy({
                     }
                     
                     if (user) {
-                        return done(null, false, req.flash('loginMessage', 'That email is already taken.'));
+                        return done(null, false, {'error': 'That email is already taken.'});
                         // Using 'loginMessage instead of signupMessage because it's used by /connect/local'
                     } else {
                         

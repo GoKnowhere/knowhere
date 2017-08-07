@@ -1,6 +1,7 @@
 var router = require('express').Router();
 var auth = require('../controllers/auth');
 var passport = require('passport');
+var passportHelper = require('../config/passport');
 
 router.post('/login', auth.login);
 router.post('/signup', auth.signup);

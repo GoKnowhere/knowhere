@@ -27,6 +27,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+require('./config/passport')(app, passport);
 
 app.all('/*', function(req, res, next) {
   // CORS headers
@@ -66,7 +67,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.json('error');
+  res.json({'error':err.message});
 });
 
 module.exports = app;
