@@ -114,25 +114,28 @@ passport.use(new InstagramStrategy({
                     if (user.id) {
                       return done(null, false, {'error': 'Email is already talken'});
                     } else {
-                      var hash = auth.hashPassword(req.body.password);
-                      console.log(hash);
-              
-                      // create the user
-                      var newUser={
-                          "email":req.body.email,
-                          "password":hash,
-                          "first_name":req.body.first_name,
-                          "last_name": req.body.last_name,
-                          "city": req.body.city,
-                          "locale": req.body.locale
-                      }
+                      auth.hashPassword(req.body.password, function(err, hash) {
+                          // create the user
 
-                      User.create(newUser, function(err) {
-                          if (err)
-                              return done(err);
+                          console.log('inside the hash password cb')
+                        var newUser={
+                            "email":req.body.email,
+                            "password":hash,
+                            "first_name":req.body.first_name,
+                            "last_name": req.body.last_name,
+                            "city": req.body.city,
+                            "locale": req.body.locale
+                        }
 
-                          return done(null, newUser);
+                        User.create(newUser, function(err) {
+                            if (err)
+                                return done(err);
+
+                            return done(null, newUser);
+                        });
                       });
+              
+                    
                   }
 
                 });
@@ -151,7 +154,6 @@ passport.use(new InstagramStrategy({
                     } else {
                         
                       var hash = auth.hashPassword(req.body.password);
-                      var today = new Date();
 
                         // create the user
                         var newUser={
