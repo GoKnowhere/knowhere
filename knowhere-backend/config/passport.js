@@ -4,7 +4,7 @@ var FbStrategy = require('passport-facebook').Strategy;
 var InstagramStrategy = require('passport-instagram').Strategy;
 var LocalStrategy    = require('passport-local').Strategy;
 var User = require('../models/User');
-var auth = ('../controllers/auth');
+var auth = require('../controllers/auth');
 
 
 
@@ -102,29 +102,29 @@ passport.use(new InstagramStrategy({
         process.nextTick(function() {
             // if the user is not already logged in:
             if (!req.user) {
+              console.log('here');
                 User.findOne({ 'email' :  email }, function(err, user) {
                     // if there are any errors, return the error
+                    console.log('here again');
                     if (err)
                         return done(err);
 
                     // check to see if theres already a user with that email
-                    if (user) {
+
+                    if (user.id) {
                       return done(null, false, {'error': 'Email is already talken'});
                     } else {
-
                       var hash = auth.hashPassword(req.body.password);
-                      var today = new Date();
-
+                      console.log(hash);
+              
                       // create the user
                       var newUser={
+                          "email":req.body.email,
+                          "password":hash,
                           "first_name":req.body.first_name,
                           "last_name": req.body.last_name,
-                          "email":req.body.email,
                           "city": req.body.city,
-                          "locale": req.body.locale,
-                          "password":hash,
-                          "created_at":today,
-                          "updated_at":today
+                          "locale": req.body.locale
                       }
 
                       User.create(newUser, function(err) {

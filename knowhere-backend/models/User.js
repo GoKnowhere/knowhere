@@ -14,9 +14,17 @@ var User = {
 	},
 
 	create: function(user, done) {
-		user = Object.values(user);
-		db.get().query('INSERT INTO users (email, password, first_name, last_name, city, locale) VALUES(?, ?, ?, ?, ?, ?)', user, function(err, result) {
+		newUser = [];
+		for(key in user) {
+    if(user.hasOwnProperty(key)) {
+        var value = user[key];
+        newUser.push(value);
+    }
+}
+		console.log(newUser);
+		db.get().query('INSERT INTO users (email, password, first_name, last_name, city, locale) VALUES(?, ?, ?, ?, ?, ?)', newUser, function(err, result) {
 			if (err) {
+				console.log('db error: ' + err);
 				return done(err);
 			}
     		done(null, result.insertId);
