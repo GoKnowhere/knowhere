@@ -65,21 +65,26 @@ passport.use(new InstagramStrategy({
 
         // asynchronous
         process.nextTick(function() {
-            User.findOne({ 'email' :  email }, function(err, user) {
+          console.log('request email ' + req.body.email);
+            User.findOne(req.body.email, function(err, user) {
                 // if there are any errors, return the error
                 if (err)
                     return done(err);
 
                 // if no user is found, return the message
-                if (!user)
-                    return done(null, false, {'loginMessage': 'No user found.'});
+                if (!user) {
 
-                if (!user.validPassword(password))
-                    return done(null, false, {'loginMessage': 'Oops! Wrong password.'});
+
+                    return done(null, false, {'loginMessage': 'No user found.'});
+                  console.log('passport user ' + user);
+                // if (!auth.validate(req.body.email, req.body.password, user.password))
+                //     return done(null, false, {'loginMessage': 'Oops! Wrong password.'});
 
                 // all is well, return user
-                else
+                 } else {
+                    console.log('passport else user ' + user);
                     return done(null, user);
+                    }
             });
         });
 

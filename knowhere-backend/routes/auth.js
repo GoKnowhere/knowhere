@@ -3,6 +3,7 @@ var auth = require('../controllers/auth');
 var passport = require('passport');
 var passportHelper = require('../config/passport');
 
+router.get('/login', auth.getLogin);
 router.post('/login', auth.login);
 router.post('/signup', auth.signup);
 router.get('/signup', 

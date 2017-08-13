@@ -4,11 +4,12 @@ var db = require('../db');
 
 var User = {
 	findOne: function(email, done) {
-		db.get().query('SELECT * FROM users WHERE email = ?', email, function(err, result) {
+		db.get().query('SELECT * FROM users WHERE email = ?', [email], function(err, result) {
 		    if (err) {
 				return done(err);
 		    }
 
+		    console.log('db result ' + result[0]);
 		    done(null, result);
 		  })
 	},
