@@ -33,7 +33,7 @@ router.get('/', function(req, res) {
 /*
  * Routes that can be accessed only by authenticated & authorized users
  */
-router.use('/api/v1/admin/users', users);
+router.use('/users', users);
 
  
 module.exports = router;

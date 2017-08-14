@@ -1,6 +1,8 @@
 var router = require('express').Router();
 var users = require('../controllers/users');
+var auth = require('../controllers/auth');
 
+router.get('/:id', auth.requireAuth, users.getOne);
 router.post('/api/v1/admin/users/', users.create);
 router.get('/api/v1/admin/users', users.getAll);
 

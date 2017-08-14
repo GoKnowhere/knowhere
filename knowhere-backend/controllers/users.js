@@ -4,11 +4,17 @@ var User = require('../models/User');
     res.json({'users': users});
   },
  
-  // getOne: function(req, res) {
-  //   var id = req.params.id;
-  //   var user = data[0]; // Spoof a DB call
-  //   res.json(user);
-  // },
+  exports.getOne = function(req, res, next) {
+    var id = req.params.id;
+    User.findById(req.id, function(err, user) {
+      if (err) {
+        res.json('error in Users controller');
+      }
+
+      next(null, user);
+    });
+    res.json(user);
+  },
  
   exports.create = function(req, res) {
     res.json({'user': 'not-implemented'});

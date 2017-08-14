@@ -200,7 +200,8 @@ const jwtOptions = {
 
 // Setting up JWT login strategy
 const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {  
-  User.findById(payload._id, function(err, user) {
+  console.log('Payload ' + payload);
+  User.findById(payload.id, function(err, user) {
     if (err) { return done(err, false); }
 
     if (user) {
@@ -211,7 +212,7 @@ const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
   });
 });
 
-passport.use(jwtLogin);
+passport.use('jwt', jwtLogin);
 
 
 

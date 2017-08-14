@@ -11,7 +11,16 @@ var User = {
 
 		    console.log('db result ' + result[0]);
 		    done(null, result);
-		  })
+		  });
+	},
+
+	findById: function(id, done) {
+		db.get().query('SELECT * FROM users WHERE id = ?', [id], function(err, result) {
+			if (err) {
+				return done(err);
+			}
+			done(null, result);
+		});
 	},
 
 	create: function(user, done) {
