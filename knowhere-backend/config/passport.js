@@ -3,6 +3,8 @@ var passport = require('passport');
 var FbStrategy = require('passport-facebook').Strategy;
 var InstagramStrategy = require('passport-instagram').Strategy;
 var LocalStrategy    = require('passport-local').Strategy;
+var JwtStrategy = require('passport-jwt').Strategy;
+var ExtractJwt = require('passport-jwt').ExtractJwt;
 var User = require('../models/User');
 var auth = require('../controllers/auth');
 
@@ -189,6 +191,27 @@ passport.use(new InstagramStrategy({
 
     }));
 
+const jwtOptions = {  
+  // Telling Passport to check authorization headers for JWT
+  jwtFromRequest: ExtractJwt.fromAuthHeader(),
+  // Telling Passport where to find the secret
+  secretOrKey: require('./secret.js')()
+};
+
+// Setting up JWT login strategy
+const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {  
+  User.findById(payload._id, function(err, user) {
+    if (err) { return done(err, false); }
+
+    if (user) {
+      done(null, user);
+    } else {
+      done(null, false);
+    }
+  });
+});
+
+passport.use(jwtLogin);
 
 
 
